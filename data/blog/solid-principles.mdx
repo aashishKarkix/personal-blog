@@ -1,0 +1,547 @@
+---
+title: 'Understanding SOLID Principles'
+date: '2024-6-28'
+lastmod: '2024-6-28'
+tags: ['java', 'programming', 'software-design', 'solid-principles']
+draft: false
+summary: 'A comprehensive guide to understanding and applying SOLID principles in Java for better software design.'
+layout: PostLayout
+canonicalUrl: https://aashish.name.np/solid-principles
+---
+
+## Introduction
+
+Every software developer faces the challenge of building applications that are not only functional but also easy to maintain, scalable, and robust under the stress of new requirements and user demands. This is where the SOLID principles come into play, providing a proven framework for tackling these challenges head-on.
+
+SOLID is an acronym that represents five fundamental principles of object-oriented programming and design — principles that guide developers in creating software that is more flexible, understandable, and maintainable. These principles are not just theoretical concepts but are tools to build cleaner code that adapts gracefully to change over time:
+
+1. **Single Responsibility Principle (SRP):** A class should have only one reason to change.
+2. **Open/Closed Principle (OCP):** Software entities should be open for extension, but closed for modification.
+3. **Liskov Substitution Principle (LSP):** Objects of a superclass shall be replaceable with objects of a subclass without affecting the correctness of the program.
+4. **Interface Segregation Principle (ISP):** No client should be forced to depend on methods it does not use.
+5. **Dependency Inversion Principle (DIP):** Depend on abstractions, not on concretions.
+
+![SOLID Principles Diagram](/static/images/solid-principles/solid.png)
+
+In this blog post, we'll dive deep into each of these principles with practical Java examples, illustrating not just the theory but also how you can apply these principles to make your own codebase more robust and adaptable. Whether you’re a beginner looking to understand the basics or a seasoned developer aiming to refine your design approach, this exploration will arm you with the knowledge to enhance your software design significantly.
+
+## 1. Single Responsibility Principle (SRP)
+
+### Definition:
+
+A class should have only one reason to change, meaning it should have only one job or responsibility.
+
+### Explanation:
+
+The SRP ensures that a class is focused on a single task, making the code more modular and easier to maintain. When a class has only one responsibility, changes to that responsibility won't affect other parts of the code, reducing the risk of introducing bugs.
+
+### Example:
+
+```java
+class User {
+    private String name;
+    private String email;
+
+    // getters and setters
+}
+
+class UserRepository {
+    public void save(User user) {
+        // code to save user to database
+    }
+}
+
+class EmailService {
+    public void sendEmail(User user) {
+        // code to send email to user
+    }
+}
+```
+
+### Real-World Application:
+
+Imagine you're building an e-commerce platform. Following SRP, you would have separate classes for handling user data, processing orders, and managing inventory. This modularity allows for easier updates and maintenance. For instance, if you need to change the way email notifications are sent, you only need to update the EmailService class without affecting order processing or user data management.
+
+#### Before Applying SRP:
+
+```java
+class UserService {
+    public void saveUser(User user) {
+        // code to save user to database
+        // code to send email to user
+    }
+}
+```
+#### After Applying SRP:
+
+```java
+class UserRepository {
+    public void save(User user) {
+        // code to save user to database
+    }
+}
+
+class EmailService {
+    public void sendEmail(User user) {
+        // code to send email to user
+    }
+}
+```
+
+In this improved design:
+- The `EmailService` class handles only email-related functionality, adhering to the Single Responsibility Principle.
+- Each class (`UserRepository`, `EmailService`) has a clear responsibility, making the codebase more maintainable and reducing potential bugs.
+
+## 2. Open/Closed Principle (OCP)
+
+**Definition:**
+Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
+
+**Explanation:**
+The OCP states that you should be able to extend the behavior of a system without modifying its existing code. This principle helps in making the code more flexible and reduces the risk of breaking existing functionality when adding new features.
+
+**Example:**
+```java
+abstract class Shape {
+    abstract double area();
+}
+
+class Circle extends Shape {
+    private double radius;
+
+    Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    double area() {
+        return Math.PI * radius * radius;
+    }
+}
+
+class Rectangle extends Shape {
+    private double length;
+    private double width;
+
+    Rectangle(double length, double width) {
+        this.length = length;
+        this.width = width;
+    }
+
+    @Override
+    double area() {
+        return length * width;
+    }
+}
+```
+
+### Real-World Application:
+
+Imagine you're developing a financial application that calculates interest for various accounts. By adhering to the OCP, you can introduce new types of accounts (e.g., SavingsAccount, CheckingAccount) without modifying the core interest calculation logic. Each new account type can extend the Account class and implement its specific interest calculation method.
+
+#### Before Applying OCP:
+
+```java
+class InterestCalculator {
+    public double calculateInterest(Account account) {
+        if (account instanceof SavingsAccount) {
+            // calculate savings account interest
+        } else if (account instanceof CheckingAccount) {
+            // calculate checking account interest
+        }
+        // more code for other account types
+    }
+}
+```
+#### After Applying OCP:
+
+```java
+abstract class Account {
+    abstract double calculateInterest();
+}
+
+class SavingsAccount extends Account {
+    // implementation of calculateInterest for savings account
+}
+
+class CheckingAccount extends Account {
+    // implementation of calculateInterest for checking account
+}
+```
+
+ In this improved design:
+- The `InterestCalculator` class no longer needs to check the type of each account (e.g., `SavingsAccount`, `CheckingAccount`) to calculate interest.
+- Each `Account` subclass (`SavingsAccount`, `CheckingAccount`) implements its own `calculateInterest` method, adhering to the Open/Closed Principle.
+- New types of accounts can be introduced by extending the `Account` class and implementing the `calculateInterest` method, without modifying existing code in `InterestCalculator`.
+
+
+## 3. Liskov Substitution Principle (LSP)
+
+**Definition:**
+Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
+
+**Explanation:**
+The LSP ensures that subclasses can be used in place of their parent classes without causing errors or unexpected behavior. This principle promotes the use of inheritance and polymorphism in a way that doesn't violate the integrity of the application.
+
+**Example (Violation):**
+```java
+class Bird {
+    public void fly() {
+        System.out.println("Flying");
+    }
+}
+
+class Sparrow extends Bird {
+}
+
+class Ostrich extends Bird {
+    @Override
+    public void fly() {
+        throw new UnsupportedOperationException("Ostrich can't fly");
+    }
+}
+```
+
+### Example (Correct):
+
+```java
+abstract class Bird {
+    abstract void move();
+}
+
+class FlyingBird extends Bird {
+    public void move() {
+        fly();
+    }
+
+    private void fly() {
+        System.out.println("Flying");
+    }
+}
+
+class WalkingBird extends Bird {
+    public void move() {
+        walk();
+    }
+
+    private void walk() {
+        System.out.println("Walking");
+    }
+```
+
+### Real-World Application:
+
+#### Before Applying LSP:
+
+Imagine you're developing a graphical application where different shapes (e.g., Circle, Square) inherit from a common `Shape` class. The `draw` method in the `Shape` class is overridden by each subclass to render its specific shape on the screen.
+
+```java
+class Shape {
+    void draw() {
+        // Base draw implementation
+    }
+}
+
+class Circle extends Shape {
+    @Override
+    void draw() {
+        // Draw circle specific implementation
+    }
+}
+
+class Square extends Shape {
+    @Override
+    void draw() {
+        // Draw square specific implementation
+    }
+}
+```
+
+#### After Applying LSP:
+
+By adhering to the Liskov Substitution Principle, each subclass (`Circle`, `Square`) should be replaceable with its superclass (`Shape`) without affecting the behavior of the program. This ensures that the `draw` method behaves consistently across different shapes, maintaining the application's correctness and integrity.
+
+```java
+abstract class Shape {
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    @Override
+    void draw() {
+        // Draw circle specific implementation
+    }
+}
+
+class Square extends Shape {
+    @Override
+    void draw() {
+        // Draw square specific implementation
+    }
+}
+```
+
+In this improved design:
+- Each subclass (`Circle`, `Square`) adheres to the Liskov Substitution Principle by implementing its own `draw` method without altering the expected behavior defined in the superclass (`Shape`).
+- The `draw` method in each subclass (`Circle`, `Square`) can be used interchangeably with the `draw` method in the superclass (`Shape`), ensuring consistent behavior across different shapes.
+- The application maintains correctness and integrity by following a consistent approach to shape rendering, enhancing maintainability and scalability.
+
+
+## 4. Interface Segregation Principle (ISP)
+
+**Definition:**
+A client should not be forced to depend on interfaces it does not use.
+
+**Explanation:**
+The ISP encourages creating smaller, more specific interfaces rather than a large, general-purpose interface. This way, clients only need to implement the methods that are relevant to them, leading to more modular and flexible code.
+
+**Example:**
+
+```java
+interface Worker {
+    void work();
+}
+
+interface Eater {
+    void eat();
+}
+
+class HumanWorker implements Worker, Eater {
+    public void work() {
+        System.out.println("Human working");
+    }
+
+    public void eat() {
+        System.out.println("Human eating");
+    }
+}
+
+class RobotWorker implements Worker {
+    public void work() {
+        System.out.println("Robot working");
+    }
+```
+### Real-World Application:
+
+#### Before Applying ISP:
+
+Consider a software system for managing a warehouse where `Worker` interface initially includes methods for both `work()` and `eat()`. All workers, including human and robotic ones, must implement both methods. This forces unnecessary behavior (eating) on robots, which don't need it.
+
+```java
+// Before applying ISP
+interface Worker {
+    void work();
+    void eat();
+}
+
+class HumanWorker implements Worker {
+    public void work() {
+        System.out.println("Human working");
+    }
+
+    public void eat() {
+        System.out.println("Human eating");
+    }
+}
+
+class RobotWorker implements Worker {
+    public void work() {
+        System.out.println("Robot working");
+    }
+
+    // RobotWorker has no need for an eat() method
+}
+```
+
+#### After Applying ISP:
+
+By following the Interface Segregation Principle, the `Worker` interface is refactored into smaller, more specific interfaces. Now, `Worker` interface remains focused on `work()` only, while `Eater` interface handles `eat()` behavior separately. This modification allows human workers to implement both interfaces, fulfilling their dual roles, while robot workers implement only the `work()` interface, thus avoiding unnecessary method implementation.
+
+```java
+// After applying ISP
+interface Worker {
+    void work();
+}
+
+interface Eater {
+    void eat();
+}
+
+class HumanWorker implements Worker, Eater {
+    public void work() {
+        System.out.println("Human working");
+    }
+
+    public void eat() {
+        System.out.println("Human eating");
+    }
+}
+
+class RobotWorker implements Worker {
+    public void work() {
+        System.out.println("Robot working");
+    }
+}
+```
+
+In this improved design:
+- The `Worker` interface focuses solely on the `work()` method, ensuring that all workers are only obligated to implement the necessary behavior related to their role.
+- The introduction of the `Eater` interface segregates the eating behavior, allowing human workers to implement both `Worker` and `Eater` interfaces, while robot workers can implement only the `Worker` interface without unnecessary methods.
+
+## 5. Dependency Inversion Principle (DIP)
+
+**Definition:**
+High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
+
+**Explanation:**
+The DIP helps in reducing the dependency between high-level and low-level modules by introducing abstractions (interfaces) that the high-level modules depend on. This leads to more decoupled and flexible code.
+
+**Example:**
+
+```java
+interface Database {
+    void connect();
+}
+
+class MySQLDatabase implements Database {
+    public void connect() {
+        System.out.println("Connecting to MySQL");
+    }
+}
+
+class Application {
+    private Database database;
+
+    Application(Database database) {
+        this.database = database;
+    }
+
+    public void connectToDatabase() {
+        database.connect();
+    }
+```
+
+### Real-World Application:
+
+#### Before Applying DIP:
+
+Consider a scenario where you have an e-commerce platform with an `OrderService` class responsible for placing orders and updating the order status directly using MySQL database operations:
+
+```java
+class MySQLDatabase {
+    public void connect() {
+        // Connect to MySQL database
+    }
+
+    public void saveOrder(Order order) {
+        // Save order to MySQL database
+    }
+
+    public void updateOrderStatus(Order order) {
+        // Update order status in MySQL database
+    }
+}
+
+class OrderService {
+    private MySQLDatabase database;
+
+    OrderService() {
+        this.database = new MySQLDatabase();
+    }
+
+    public void placeOrder(Order order) {
+        database.connect();
+        database.saveOrder(order);
+        database.updateOrderStatus(order);
+    }
+}
+```
+
+In this example, OrderService directly depends on MySQLDatabase, violating the Dependency Inversion Principle because the high-level OrderService module depends on the low-level MySQLDatabase details.
+
+#### After Applying DIP:
+
+After applying the Dependency Inversion Principle (DIP), the `Database` interface is introduced to abstract the database operations. Here’s how it could look:
+
+```java
+interface Database {
+    void connect();
+    void saveOrder(Order order);
+    void updateOrderStatus(Order order);
+}
+
+class MySQLDatabase implements Database {
+    public void connect() {
+        System.out.println("Connecting to MySQL");
+    }
+
+    public void saveOrder(Order order) {
+        System.out.println("Saving order in MySQL");
+    }
+
+    public void updateOrderStatus(Order order) {
+        System.out.println("Updating order status in MySQL");
+    }
+}
+
+class OrderService {
+    private Database database;
+
+    OrderService(Database database) {
+        this.database = database;
+    }
+
+    public void placeOrder(Order order) {
+        database.connect();
+        database.saveOrder(order);
+        database.updateOrderStatus(order);
+    }
+}
+```
+
+In this improved design:
+
+- `OrderService` now depends on the `Database` interface rather than the concrete `MySQLDatabase` class.
+- This decoupling allows `OrderService` to work with any class that implements the `Database` interface (e.g., `MySQLDatabase`, `PostgreSQLDatabase`, etc.).
+- The high-level `OrderService` module no longer depends on the low-level details of specific database implementations, promoting flexibility and easier maintenance.
+
+## Advantages of SOLID Architecture
+
+- **Modularity**: Encourages breaking down software into smaller, manageable components, making it easier to understand, maintain, and extend.
+
+- **Flexibility**: Allows for easier modifications and enhancements without affecting existing code, thanks to principles like Open/Closed and Dependency Inversion.
+
+- **Scalability**: Provides a foundation for scalable software by promoting loosely coupled components and modular design.
+
+- **Readability**: Enhances code readability and comprehension by promoting clear and focused responsibilities for each module or class.
+
+- **Testability**: Facilitates unit testing and integration testing by reducing dependencies and isolating components.
+
+## Disadvantages and Pitfalls of SOLID Architecture
+
+- **Complexity**: Applying SOLID principles rigorously can lead to an overly complex design, especially for smaller projects or when not applied judiciously.
+
+- **Over-engineering**: There's a risk of over-engineering when applying SOLID principles without considering the specific needs and scope of the project.
+
+- **Learning Curve**: Requires developers to understand and apply abstract principles, which may have a steep learning curve for those new to software design patterns.
+
+- **Performance Impact**: In some cases, achieving flexibility and modularity through SOLID principles can introduce performance overhead due to increased abstraction layers and indirection.
+
+- **Maintenance Overhead**: While SOLID promotes easier maintenance in the long term, adhering strictly without a clear architectural vision can lead to increased maintenance efforts.
+
+Overall, while SOLID principles provide a robust foundation for building maintainable and scalable software systems, careful consideration and balance are essential to avoid potential drawbacks.
+
+
+### Conclusion
+
+By adhering to the SOLID principles, you can create software that is more modular, flexible, and easier to maintain. These principles provide a solid foundation for designing robust and scalable systems. Applying these principles may take some practice, but the benefits they bring to your codebase are well worth the effort.
+
+### Further Reading
+
+- [Clean Code by Robert C. Martin](https://github.com/jnguyen095/clean-code/blob/master/Clean.Code.A.Handbook.of.Agile.Software.Craftsmanship.pdf)
+- [Design Patterns: Elements of Reusable Object-Oriented Software by Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides](https://github.com/TushaarGVS/Design-Patterns-Mentorship/blob/master/Erich%20Gamma,%20Richard%20Helm,%20Ralph%20Johnson,%20John%20M.%20Vlissides-Design%20Patterns_%20Elements%20of%20Reusable%20Object-Oriented%20Software%20%20-Addison-Wesley%20Professional%20(1994).pdf)
+- [Head First Design Patterns by Eric Freeman, Bert Bates, Kathy Sierra, Elisabeth Robson](https://github.com/fsaadatmand/Head-First-Design-Pattern-CPP-Examples/blob/master/README.md)
+
+### Your Turn
+
+How have you applied SOLID principles in your projects? Share your experiences in the comments below!
