@@ -292,7 +292,7 @@ numbers.stream()
        .collect(Collectors.toList());
 
 ```
-Explanation:
+#### Explanation:
 
 - **numbers** is a stream of elements.
 - `.map(n -> { ... })` applies a function to each element of the stream.
@@ -363,10 +363,10 @@ Sequential Time :   4764500
 Parallel Time   :   3841594
 ```
 
-Explanation:
+#### Explanation:
 
-- **numbers** is a stream of integers.
-- `.map(n -> n * 2)` applies a function to double each integer in the stream.
+- **numbers** is a list of integers.
+- `.map(SeqAndParallelProcessing::expensiveComputation)` applies a function that performs a computationally expensive operation on each integer in the stream.
 - `System.nanoTime()` is used to measure the elapsed time in nanoseconds.
 - **Sequential Time** measures the time taken by the sequential stream operation.
 - **Parallel Time** measures the time taken by the parallel stream operation.
@@ -379,7 +379,7 @@ Explanation:
 - **Benefits:** Enhances throughput by leveraging multiple CPU cores for computation.
 - **When to Use Parallel Streams:** Use parallel streams when processing large datasets where the benefits of parallelism outweigh the overhead of thread management.
 
-In summary, parallel streams in Java provide a mechanism to exploit multi-core processors for faster data processing, but careful consideration of task characteristics is essential to optimize performance effectively.
+In Summary, Parallel streams in Java provide a mechanism to exploit multi-core processors for faster data processing. However, careful consideration of the task's characteristics is essential to optimize performance effectively. Parallel streams are beneficial when the task is CPU-intensive and can be divided into independent subtasks, while ensuring that the overhead from thread management does not negate the performance gains.
 
 
 ## Conclusion
