@@ -63,9 +63,7 @@ List<Integer> evenNumbers = numbers.stream()
 - **Usage:** Useful for selecting elements that meet specific criteria.
 - **Benefits:** Simplifies data selection tasks, maintains order of elements.
 
-#### When to Use `filter`:
-
-Use `filter` when you need to selectively process elements of a stream based on certain conditions. It's particularly effective for tasks involving data filtering and selection operations.
+- **When to Use `filter`:** Use `filter` when you need to selectively process elements of a stream based on certain conditions. It's particularly effective for tasks involving data filtering and selection operations.
 
 In summary, the `filter` operation in Java Streams provides a straightforward way to extract elements that satisfy a given predicate, enhancing the flexibility and efficiency of data processing tasks.
 
@@ -94,9 +92,7 @@ List<String> upperCaseNames = names.stream()
 - **Usage:** Useful for converting elements from one type to another or modifying elements based on a function.
 - **Benefits:** Simplifies data transformation tasks, maintains order of elements.
 
-#### When to Use `map`:
-
-Use `map` when you need to transform elements of a stream into another form based on a function. It's particularly useful for tasks involving data conversion or modification operations.
+- **When to Use `map`:** Use `map` when you need to transform elements of a stream into another form based on a function. It's particularly useful for tasks involving data conversion or modification operations.
 
 In summary, the `map` operation in Java Streams facilitates the transformation of elements by applying a specified function, enhancing the flexibility and efficiency of data processing tasks.
 
@@ -122,9 +118,7 @@ Optional<Integer> sum = numbers.stream()
 - **Usage:** Useful for computing sums, aggregating data, or performing custom reductions.
 - **Benefits:** Facilitates aggregation operations, supports parallel execution, and handles optional results.
 
-#### When to Use `reduce`:
-
-Use `reduce` when you need to perform aggregations or combine elements of a stream into a single result using a binary operation. It's particularly effective for tasks involving summing, finding maximum or minimum values, or custom reduction operations.
+- **When to Use `reduce`:** Use `reduce` when you need to perform aggregations or combine elements of a stream into a single result using a binary operation. It's particularly effective for tasks involving summing, finding maximum or minimum values, or custom reduction operations.
 
 In summary, the `reduce` operation in Java Streams provides a powerful mechanism for aggregating stream elements into a single value, offering flexibility and efficiency in data processing tasks.
 
@@ -155,10 +149,7 @@ List<Integer> flattenedList = numberLists.stream()
 - **Purpose:** Flattens nested collections or streams into a single stream.
 - **Usage:** Handles nested structures efficiently, transforming elements into a single level.
 - **Benefits:** Simplifies processing of nested data, maintains order of elements.
-
-#### When to Use `flatMap`
-
-Use `flatMap` when dealing with nested collections or streams and you need to process all elements uniformly regardless of their original nesting level. It's particularly useful for operations where you want to flatten and streamline data processing tasks.
+- **When to Use `flatMap`:** Use `flatMap` when dealing with nested collections or streams and you need to process all elements uniformly regardless of their original nesting level. It's particularly useful for operations where you want to flatten and streamline data processing tasks.
 
 In summary, `flatMap` is a versatile operation in Java Streams that facilitates working with nested data structures by flattening them into a single stream, making data processing more straightforward and concise.
 
@@ -184,8 +175,7 @@ List<String> sortedNames = names.stream()
 - **Usage:** Useful for ordering elements before further processing or displaying results.
 - **Benefits:** Simplifies sorting operations, maintains order of elements.
 
-#### When to Use sorted:
-Use `sorted` when you need to arrange elements of a stream in a specific order, either natural or defined by a custom comparator. It's particularly effective for tasks involving data presentation, reporting, or where ordered data processing is required.
+- **When to Use sorted:** Use `sorted` when you need to arrange elements of a stream in a specific order, either natural or defined by a custom comparator. It's particularly effective for tasks involving data presentation, reporting, or where ordered data processing is required.
 
 In summary, the `sorted` operation in Java Streams provides a straightforward way to arrange stream elements, enhancing the flexibility and usability of data processing tasks.
 
@@ -210,9 +200,7 @@ names.stream()
 - **Purpose:** Applies a function to each element of the stream.
 - **Usage:** Useful for performing actions or operations on each element of the stream without returning a new stream or collection.
 - **Benefits:** Facilitates side-effect operations, such as printing, logging, or updating external state.
-
-#### When to Use forEach:
-Use `forEach` when you need to perform an operation on each element of the stream, such as printing elements, logging, or updating external resources. It is particularly suitable for scenarios where you want to execute a function for its side effects on each element.
+- **When to Use forEach:** Use `forEach` when you need to perform an operation on each element of the stream, such as printing elements, logging, or updating external resources. It is particularly suitable for scenarios where you want to execute a function for its side effects on each element.
 
 In summary, the `forEach` operation in Java Streams enables straightforward iteration and application of functions to stream elements, supporting various side-effect operations during stream processing.
 
