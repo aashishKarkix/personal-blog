@@ -11,7 +11,7 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
   email: 'aashishkarkix@gmail.com',
-  github: 'https://github.com/aashishkarki11',
+  github: 'https://github.com/aashishKarkix',
   twitter: 'https://twitter.com/Twitter',
   facebook: 'https://facebook.com',
   youtube: 'https://youtube.com',
